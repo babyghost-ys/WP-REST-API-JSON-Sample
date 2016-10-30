@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Alamofire
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -28,6 +29,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Do any additional setup after loading the view, typically from a nib.
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        getPosts(getposts: latestPosts)
+    }
+    
+    func getPosts(getposts : String)
+    {
+        
+        Alamofire.request(getposts, method: .get, parameters: parameters, encoding: JSONEncoding.default, headers: [:]).responseJSON { (response) in
+            guard let data = response.result.value else{
+                print("Request failed with error")
+                return
+            }
+            
+            self.json = JSON(data)
+            self.tableView.reloadData()
+        }
     }
 
     override func didReceiveMemoryWarning() {
