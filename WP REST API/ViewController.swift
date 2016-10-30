@@ -7,10 +7,21 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
+    
+    //JSON
+    let latestPosts : String = "https://wlcdesigns.com/wp-json/wp/v2/posts/"
+    
+    let parameters : [String:AnyObject] = [
+        "filter[category_name]" : "tutorials" as AnyObject,
+        "filter[posts_per_page]" : 5 as AnyObject
+    ]
+    
+    var json : JSON = JSON.null
     
     override func viewDidLoad() {
         super.viewDidLoad()
