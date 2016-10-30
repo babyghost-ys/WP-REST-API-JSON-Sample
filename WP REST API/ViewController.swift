@@ -14,8 +14,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     @IBOutlet weak var tableView: UITableView!
     
+    var currentNoOfItems = 10
     //JSON
-    let latestPosts : String = "https://www.winandmac.com/wp-json/wp/v2/posts/?filter[category_name]=news&per_page=100"
+    var latestPosts : String = "https://www.winandmac.com/wp-json/wp/v2/posts/?filter[category_name]=news&per_page="
     
 //    let para : [String:AnyObject] = [
 //        "filter[category_name]" : "news" as AnyObject,
@@ -29,6 +30,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Do any additional setup after loading the view, typically from a nib.
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        latestPosts = "https://www.winandmac.com/wp-json/wp/v2/posts/?filter[category_name]=news&per_page=\(currentNoOfItems)"
         getPosts(getposts: latestPosts)
     }
     
@@ -77,6 +79,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return cell
         }
         cell.textLabel?.text = title
+        let lastElementFound = self.json.count - 1
+        if indexPath.row == lastElementFound, currentNoOfItems < 100 {
+            // handle your logic here to get more items, add it to dataSource and reload tableview
+            print("scrolled to bottom")
+            currentNoOfItems += 10
+            latestPosts = "https://www.winandmac.com/wp-json/wp/v2/posts/?filter[category_name]=news&per_page=\(currentNoOfItems)"
+            getPosts(getposts: latestPosts)
+        }
         return cell
     }
 
