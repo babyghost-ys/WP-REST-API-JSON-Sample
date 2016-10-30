@@ -15,12 +15,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var tableView: UITableView!
     
     //JSON
-    let latestPosts : String = "https://www.winandmac.com/wp-json/wp/v2/posts/"
+    let latestPosts : String = "https://www.winandmac.com/wp-json/wp/v2/posts/?filter[category_name]=news&per_page=100"
     
-    let para : [String:AnyObject] = [
-        "filter[category_name]" : "news" as AnyObject,
-        "filter[posts_per_page]" : 10 as AnyObject
-    ]
+//    let para : [String:AnyObject] = [
+//        "filter[category_name]" : "news" as AnyObject,
+//        "&per_page" : 100 as AnyObject,
+//    ]
     
     var json : JSON = JSON.null
     
@@ -35,7 +35,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func getPosts(getposts : String)
     {
         
-        Alamofire.request(getposts, method: .get, parameters: para, encoding: JSONEncoding.default, headers: [:]).responseJSON { (response) in
+        Alamofire.request(getposts, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: [:]).responseJSON { (response) in
             guard let data = response.result.value else{
                 print("Request failed with error")
                 return
@@ -72,7 +72,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         // Configure the cell...
         //Make sure post title is a string
-        guard let title = self.json[0]["title"]["rendered"].string else{
+        guard let title = self.json[indexPath.row]["title"]["rendered"].string else{
             cell.textLabel?.text = "Loading..."
             return cell
         }
