@@ -83,13 +83,51 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if indexPath.row == lastElementFound, currentNoOfItems < 100 {
             // handle your logic here to get more items, add it to dataSource and reload tableview
             print("scrolled to bottom")
+            setUpFooterIndicator()
             currentNoOfItems += 10
+            if currentNoOfItems == 100 {
+                self.tableView.tableFooterView = nil
+            }
             latestPosts = "https://www.winandmac.com/wp-json/wp/v2/posts/?filter[category_name]=news&per_page=\(currentNoOfItems)"
             getPosts(getposts: latestPosts)
         }
         return cell
     }
 
+    func setUpFooterIndicator(){
+        let footerView = UIView(frame: CGRect.zero)
+        footerView.backgroundColor = UIColor.gray
+        
+        let activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        footerView.addSubview(activityView)
+        activityView.startAnimating()
+        
+        activityView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint(
+            item: activityView,
+            attribute: .centerX,
+            relatedBy: .equal,
+            toItem: footerView,
+            attribute: .centerX,
+            multiplier: 1.0,
+            constant: 0.0
+            ).isActive = true
+        
+        NSLayoutConstraint(
+            item: activityView,
+            attribute: .centerY,
+            relatedBy: .equal,
+            toItem: footerView, 
+            attribute: .centerY, 
+            multiplier: 1.0, 
+            constant: 0.0
+            ).isActive = true
+        
+        self.tableView.tableFooterView = footerView
+        
+
+    }
 
 }
 
